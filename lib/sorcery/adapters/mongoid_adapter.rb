@@ -43,7 +43,7 @@ module Sorcery
 
         def find_by_credentials(credentials)
           @klass.sorcery_config.username_attribute_names.each do |attribute|
-            @user = @klass.where(attribute => credential_regex(credentials[0])).first
+            @user = @klass.where(attribute => credential_regex(credentials[0])).asc('_id').first
             break if @user
           end
           @user
@@ -51,15 +51,15 @@ module Sorcery
 
         def find_by_oauth_credentials(provider, uid)
           @user_config ||= ::Sorcery::Controller::Config.user_class.to_s.constantize.sorcery_config
-          @klass.where(@user_config.provider_attribute_name => provider, @user_config.provider_uid_attribute_name => uid).first
+          @klass.where(@user_config.provider_attribute_name => provider, @user_config.provider_uid_attribute_name => uid).asc('_id').first
         end
 
         def find_by_activation_token(token)
-          @klass.where(@klass.sorcery_config.activation_token_attribute_name => token).first
+          @klass.where(@klass.sorcery_config.activation_token_attribute_name => token).asc('_id').first
         end
 
         def find_by_remember_me_token(token)
-          @klass.where(@klass.sorcery_config.remember_me_token_attribute_name => token).first
+          @klass.where(@klass.sorcery_config.remember_me_token_attribute_name => token).asc('_id').first
         end
 
         def transaction(&blk)
@@ -78,11 +78,11 @@ module Sorcery
         end
 
         def find_by_token(token_attr_name, token)
-          @klass.where(token_attr_name => token).first
+          @klass.where(token_attr_name => token).asc('_id').first
         end
 
         def find_by_email(email)
-          @klass.where(@klass.sorcery_config.email_attribute_name => email).first
+          @klass.where(@klass.sorcery_config.email_attribute_name => email).asc('_id').first
         end
 
         def get_current_users
